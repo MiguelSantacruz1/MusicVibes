@@ -45,7 +45,6 @@ export class LinkedQueue {
     this._count++;
   }
 
-  /** Inserta en posición (0-indexed) */
   insertAt(track: Track, index: number): void {
     if (index <= 0) return this.prepend(track);
     if (index >= this._count) return this.append(track);
