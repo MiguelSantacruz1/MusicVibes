@@ -12,8 +12,6 @@ export class GainManager {
     this._lastLevel = this._level;
   }
 
-  // ── Lectura ──────────────────────────────────────────────
-  /** Nivel efectivo (0 si silenciado) */
   get output(): number {
     return this._silenced ? 0 : this._level;
   }
@@ -27,7 +25,6 @@ export class GainManager {
     return this._silenced;
   }
 
-  // ── Escritura ────────────────────────────────────────────
   raise(step: number = 10): void {
     this._level = Math.min(100, this._level + step);
     if (this._silenced) this._silenced = false;
@@ -52,7 +49,6 @@ export class GainManager {
     }
   }
 
-  // ── Icono UI ─────────────────────────────────────────────
   iconName(): GainIcon {
     if (this._silenced || this._level === 0) return "mute";
     if (this._level < 33) return "low";
