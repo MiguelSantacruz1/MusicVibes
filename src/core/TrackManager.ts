@@ -14,7 +14,6 @@ export class TrackManager {
     this.queue = new LinkedQueue();
   }
 
-  // ── Helpers internos ─────────────────────────────────────
   private nextId(): number {
     return this.serial++;
   }
@@ -23,7 +22,6 @@ export class TrackManager {
     return { uid: this.nextId(), name, performer, length, src, blob };
   }
 
-  // ── Inserción de pistas ──────────────────────────────────
   pushFront(name: string, performer: string, length: string, src?: string, blob?: File): Track {
     const t = this.buildTrack(name, performer, length, src, blob);
     this.queue.prepend(t);
@@ -45,7 +43,6 @@ export class TrackManager {
     return t;
   }
 
-  // ── Eliminar pista ───────────────────────────────────────
   drop(uid: number): boolean {
     if (this.active?.track.uid === uid) {
       this.active = this.active.after ?? this.active.before ?? null;
@@ -53,7 +50,6 @@ export class TrackManager {
     return this.queue.deleteByUid(uid) !== null;
   }
 
-  // ── Navegación ───────────────────────────────────────────
   advance(): boolean {
     if (this.active?.after) {
       this.active = this.active.after;
@@ -97,7 +93,6 @@ export class TrackManager {
     return false;
   }
 
-  // ── Getters ──────────────────────────────────────────────
   getCurrent(): Track | null {
     return this.active?.track ?? null;
   }
