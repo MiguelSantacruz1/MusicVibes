@@ -1147,6 +1147,64 @@ body.is-playing .viz-container {
   box-shadow: inset 2px 2px 6px rgba(0, 0, 0, .15);
 }
 
+/* Tabs and View Switching */
+.view-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  justify-content: center;
+}
+
+.tab-btn {
+  padding: 8px 24px;
+  background: var(--bg);
+  border: none;
+  border-radius: 99px;
+  color: var(--muted);
+  font-family: var(--ff);
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  box-shadow: var(--neu-btn);
+  transition: all 0.2s;
+}
+
+.tab-btn:hover {
+  color: var(--text);
+  box-shadow: var(--neu-sm);
+}
+
+.tab-btn.active {
+  color: var(--accent);
+  box-shadow: var(--neu-in);
+}
+
+.btn-add-deezer {
+  width: 28px;
+  height: 28px;
+  background: var(--bg);
+  border: none;
+  color: var(--accent);
+  cursor: pointer;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--neu-sm);
+  transition: all .14s;
+  opacity: 0;
+}
+
+.song-item:hover .btn-add-deezer {
+  opacity: 1;
+}
+
+.btn-add-deezer:hover {
+  background: var(--accent);
+  color: white;
+  box-shadow: var(--neu-press);
+}
+
 /* Responsive */
 @media (max-width: 700px) {
   .player-bar {

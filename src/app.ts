@@ -13,6 +13,8 @@ import { FIXED_SONGS } from "./data/fixedSongs";
 // ── Estado global ─────────────────────────────────────────────
 let query = "";
 let playing = false;
+let activeTab: "local" | "deezer" = "local";
+let deezerResults: any[] = [];
 
 // ── Instancias ────────────────────────────────────────────────
 const catalog = new TrackManager();
@@ -83,6 +85,13 @@ function syncFx(): void {
     if (!driver.active && cur?.src && !driver.getTotal()) driver.loadSource(cur.src);
     if (cur?.blob) extractAccent(cur.blob);
     else document.documentElement.style.setProperty("--accent", "#14c8dc");
+    
+    // Si no estamos tocando un preview de Deezer, ocultar cover
+    if (!document.getElementById("vinyl-cover")?.getAttribute("data-is-deezer")) {
+      const cover = document.getElementById("vinyl-cover") as HTMLElement;
+      if (cover) cover.style.display = "none";
+    }
+    
     driver.resume();
   } else {
     disc.classList.remove("spinning");
@@ -100,6 +109,8 @@ function syncFx(): void {
   driver.loadSource(cur?.src ?? "");
   if (cur?.blob) extractAccent(cur.blob);
   else document.documentElement.style.setProperty("--accent", "#14c8dc");
+  const cover = document.getElementById("vinyl-cover") as HTMLElement;
+  if (cover) { cover.style.display = "none"; cover.removeAttribute("data-is-deezer"); }
   if (playing) driver.resume();
   repaintAll();
 };
@@ -112,6 +123,8 @@ function syncFx(): void {
   driver.loadSource(cur?.src ?? "");
   if (cur?.blob) extractAccent(cur.blob);
   else document.documentElement.style.setProperty("--accent", "#14c8dc");
+  const cover = document.getElementById("vinyl-cover") as HTMLElement;
+  if (cover) { cover.style.display = "none"; cover.removeAttribute("data-is-deezer"); }
   if (playing) driver.resume();
   repaintAll();
 };
@@ -124,6 +137,8 @@ function syncFx(): void {
   driver.loadSource(cur?.src ?? "");
   if (cur?.blob) extractAccent(cur.blob);
   else document.documentElement.style.setProperty("--accent", "#14c8dc");
+  const cover = document.getElementById("vinyl-cover") as HTMLElement;
+  if (cover) { cover.style.display = "none"; cover.removeAttribute("data-is-deezer"); }
   if (playing) driver.resume();
   repaintAll();
 };
@@ -225,6 +240,98 @@ function clearModalForm(): void {
 (window as any).onQueryInput = (e: Event): void => {
   query = (e.target as HTMLInputElement).value.toLowerCase();
   repaintList();
+  if (activeTab === "deezer") searchDeezer();
+};
+
+(window as any).switchTab = (tab: "local" | "deezer"): void => {
+  activeTab = tab;
+  document.getElementById("tab-local")?.classList.toggle("active", tab === "local");
+  document.getElementById("tab-deezer")?.classList.toggle("active", tab === "deezer");
+  
+  const viewLocal = document.getElementById("view-local") as HTMLElement;
+  const viewDeezer = document.getElementById("view-deezer") as HTMLElement;
+  if(viewLocal && viewDeezer) {
+    viewLocal.style.display = tab === "local" ? "block" : "none";
+    viewDeezer.style.display = tab === "deezer" ? "block" : "none";
+  }
+  
+  if (tab === "deezer" && query && deezerResults.length === 0) {
+    searchDeezer();
+  }
+};
+
+async function searchDeezer() {
+  if(!query) {
+    deezerResults = [];
+    repaintDeezerList();
+    return;
+  }
+  try {
+    const res = await fetch(`/api/deezer/search?q=${encodeURIComponent(query)}`);
+    const data = await res.json();
+    deezerResults = data.data || [];
+    repaintDeezerList();
+  } catch(e) {
+    console.error("Deezer search error:", e);
+  }
+}
+
+function repaintDeezerList() {
+  const container = document.getElementById("deezer-list") as HTMLElement;
+  if(!deezerResults.length) {
+    container.innerHTML = `<div class="empty"><span class="empty-icon">🎧</span><p>Busca algo para ver resultados en Deezer</p></div>`;
+    return;
+  }
+  container.innerHTML = deezerResults.map((t, i) => `
+    <div class="song-item" onclick="playDeezer(${i})">
+      <div class="song-num"><span class="song-num-text">${i + 1}</span></div>
+      <div class="song-info">
+        <div class="song-title-text">${t.title}</div>
+        <div class="song-artist-text">${t.artist.name}</div>
+      </div>
+      <div class="song-dur">0:30</div>
+      <button class="btn-add-deezer" onclick="addDeezerTrack(${i}, event)" title="Añadir a biblioteca">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+        </svg>
+      </button>
+    </div>
+  `).join("");
+}
+
+(window as any).playDeezer = (index: number) => {
+  const track = deezerResults[index];
+  if(!track || !track.preview) return;
+  driver.halt();
+  resetProgress();
+  
+  (document.getElementById("np-title") as HTMLElement).textContent = track.title;
+  (document.getElementById("np-artist") as HTMLElement).textContent = track.artist.name;
+  
+  const cover = document.getElementById("vinyl-cover") as HTMLImageElement;
+  if(cover) {
+    cover.src = track.album.cover_medium;
+    cover.style.display = "block";
+    cover.setAttribute("data-is-deezer", "true");
+  }
+  
+  driver.loadSource(track.preview);
+  playing = true;
+  document.getElementById("icon-play")!.style.display = "none";
+  document.getElementById("icon-pause")!.style.display = "block";
+  document.getElementById("vinyl")?.classList.add("spinning");
+  driver.resume();
+  syncFx();
+};
+
+(window as any).addDeezerTrack = (index: number, e: MouseEvent) => {
+  e.stopPropagation();
+  const t = deezerResults[index];
+  if(!t) return;
+  catalog.pushBack(t.title, t.artist.name, "0:30", t.preview);
+  repaintList();
+  repaintQueue();
+  alert('"' + t.title + '" añadido a la biblioteca.');
 };
 
 (window as any).toggleShuffle = (): void => {

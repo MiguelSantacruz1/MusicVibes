@@ -196,30 +196,29 @@
 
 
       <!-- Visualizador de espectro -->
-
       <div class="freq-visualizer">
-
         <canvas id="freq-canvas"></canvas>
-
       </div>
 
+      <div class="view-tabs">
+        <button id="tab-local" class="tab-btn active" onclick="switchTab('local')">Mi Biblioteca</button>
+        <button id="tab-deezer" class="tab-btn" onclick="switchTab('deezer')">Resultados Deezer</button>
+      </div>
 
-
-      <div class="col-headers">
-
+      <div class="col-headers" id="col-headers">
         <span style="text-align:center"></span>
-
         <span></span>
-
         <span style="text-align:right"></span>
-
         <span></span>
-
       </div>
 
+      <div id="view-local">
+        <div class="song-list" id="song-list"></div>
+      </div>
 
-
-      <div class="song-list" id="song-list"></div>
+      <div id="view-deezer" style="display:none;">
+        <div class="song-list" id="deezer-list"></div>
+      </div>
 
 
 
@@ -245,17 +244,13 @@
           <div class="vinyl-aura"></div>
 
           <div class="vinyl" id="vinyl">
-
             <div class="groove"></div>
             <div class="groove"></div>
-
             <div class="groove"></div>
             <div class="groove"></div>
-
             <div class="vinyl-dot"></div>
-
+            <img id="vinyl-cover" src="" style="display:none; position:absolute; width:100%; height:100%; border-radius:50%; object-fit:cover; z-index:1; opacity:0.85;" />
             <div class="vinyl-center"></div>
-
           </div>
 
         </div>
