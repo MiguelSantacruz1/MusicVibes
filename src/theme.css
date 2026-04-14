@@ -1,6 +1,4 @@
-/* ================================================================
-   theme.css — SoundWave  |  Neumorphic Light Design
-   ================================================================ */
+
 
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800;900&family=DM+Mono:wght@400;500&display=swap');
 
@@ -65,7 +63,6 @@ body {
   overflow: hidden;
 }
 
-/* ── ÁREA PRINCIPAL ── */
 .main {
   flex: 1;
   overflow-y: auto;
@@ -227,7 +224,6 @@ body.is-playing .freq-visualizer {
   height: 100%;
 }
 
-/* Cabeceras columnas */
 .col-headers {
   display: grid;
   grid-template-columns: 46px 1fr 72px 36px;
@@ -240,7 +236,6 @@ body.is-playing .freq-visualizer {
   border-bottom: 2px solid rgba(196, 202, 217, .5);
 }
 
-/* Lista pistas */
 .song-list {
   display: flex;
   flex-direction: column;
@@ -509,9 +504,7 @@ body.is-playing .song-item.active {
   flex-shrink: 0;
 }
 
-/* ================================================================
-   BARRA DEL REPRODUCTOR — neumórfica
-   ================================================================ */
+
 .player-bar {
   height: var(--bar-h);
   background: var(--bg);
@@ -810,7 +803,6 @@ body.is-playing .ctrl-play {
   line-height: 1;
 }
 
-/* Progreso */
 .progress-wrap {
   display: flex;
   align-items: center;
@@ -966,9 +958,7 @@ body.is-playing .viz-container {
   transform: scale(1.25);
 }
 
-/* ================================================================
-   MODAL
-   ================================================================ */
+
 .modal-bg {
   position: fixed;
   inset: 0;
@@ -1209,7 +1199,6 @@ body.is-playing .viz-container {
   box-shadow: var(--neu-press);
 }
 
-/* Responsive */
 @media (max-width: 700px) {
   .player-bar {
     grid-template-columns: 1fr;
