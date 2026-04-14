@@ -61,7 +61,6 @@ export class WaveRenderer {
       const y = H - bh;
       const ratio = i / this.colCount;
 
-      // Degradado accent (cyan) → accent2 (coral)
       const r = Math.round(59 + (244 - 59) * ratio);
       const g = Math.round(191 + (160 - 191) * ratio);
       const b = Math.round(206 + (160 - 206) * ratio);
@@ -72,7 +71,6 @@ export class WaveRenderer {
       this.ctx.roundRect(x, y, colW, Math.max(1, bh), rad);
       this.ctx.fill();
 
-      // Brillo en la punta
       if (v > 0.25) {
         this.ctx.fillStyle = `rgba(59,191,206,${v * 0.4})`;
         this.ctx.fillRect(x, y, colW, 2);
