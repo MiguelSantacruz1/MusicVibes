@@ -23,7 +23,6 @@ export class SoundDriver {
     });
   }
 
-  // ── Contexto de audio (inicialización diferida) ──────────
   private ensureContext(): void {
     if (!this.ctx) {
       this.ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
@@ -37,7 +36,6 @@ export class SoundDriver {
     if (this.ctx.state === "suspended") this.ctx.resume();
   }
 
-  // ── API pública ──────────────────────────────────────────
   loadSource(url: string): void {
     this.element.src = url;
     this.element.load();
@@ -73,7 +71,6 @@ export class SoundDriver {
     this.element.currentTime = time;
   }
 
-  // ── Datos de frecuencia para visualizadores ──────────────
   readFrequencies(): Uint8Array {
     if (this.analyser && this.active) {
       this.analyser.getByteFrequencyData(this.freqBuffer as any);
