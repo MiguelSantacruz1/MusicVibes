@@ -1153,6 +1153,8 @@ body.is-playing .viz-container {
   gap: 12px;
   margin-bottom: 20px;
   justify-content: center;
+  position: relative;
+  z-index: 10;
 }
 
 .tab-btn {
