@@ -10,13 +10,11 @@ import { SoundDriver } from "./core/SoundDriver";
 import jsmediatags from "jsmediatags/dist/jsmediatags.min.js";
 import { FIXED_SONGS } from "./data/fixedSongs";
 
-// ── Estado global ─────────────────────────────────────────────
 let query = "";
 let playing = false;
 let activeTab: "local" | "deezer" = "local";
 let deezerResults: any[] = [];
 
-// ── Instancias ────────────────────────────────────────────────
 const catalog = new TrackManager();
 const gain = new GainManager(70);
 const driver = new SoundDriver();
@@ -33,7 +31,6 @@ FIXED_SONGS.forEach(song => {
   catalog.pushBack(song.title, song.artist, song.duration, song.url);
 });
 
-// ── Progreso de audio ─────────────────────────────────────────
 driver.onProgress = (elapsed, total) => {
   const bar = document.getElementById("progress-fill") as HTMLElement;
   const curr = document.getElementById("time-current") as HTMLElement;
@@ -48,7 +45,6 @@ driver.onProgress = (elapsed, total) => {
 
 driver.onFinished = () => (window as any).nextTrack();
 
-// ── Helpers ───────────────────────────────────────────────────
 function fmtTime(sec: number): string {
   const m = Math.floor(sec / 60);
   const s = Math.floor(sec % 60);
@@ -69,7 +65,6 @@ function syncFx(): void {
   document.body.classList.toggle("is-playing", playing);
 }
 
-// ── Controles de reproducción ─────────────────────────────────
 (window as any).togglePlay = (): void => {
   playing = !playing;
   const disc = document.getElementById("vinyl") as HTMLElement;
@@ -170,13 +165,11 @@ function syncFx(): void {
   driver.goTo(Math.max(driver.getElapsed() - s, 0));
 };
 
-// ── Volumen ───────────────────────────────────────────────────
 (window as any).gainUp = (): void => { gain.raise(10); repaintVol(); };
 (window as any).gainDown = (): void => { gain.lower(10); repaintVol(); };
 (window as any).setGain = (v: string): void => { gain.set(parseInt(v)); repaintVol(); };
 (window as any).muteToggle = (): void => { gain.toggleSilence(); repaintVol(); };
 
-// ── Modal ─────────────────────────────────────────────────────
 (window as any).openModal = (): void =>
   (document.getElementById("modal-bg") as HTMLElement).classList.add("open");
 
@@ -374,7 +367,6 @@ function toHex(r: number, g: number, b: number): string {
   return ((r << 16) | (g << 8) | b).toString(16);
 }
 
-// ── Atajos de teclado y drag-and-drop ─────────────────────────
 window.addEventListener("keydown", (e) => {
   if (e.target instanceof HTMLInputElement) return;
   if (e.code === "Space") { e.preventDefault(); (window as any).togglePlay(); }
@@ -406,7 +398,6 @@ document.body.addEventListener("drop", (e) => {
   repaintAll();
 });
 
-// ── Iconos de volumen ─────────────────────────────────────────
 const GAIN_ICONS: Record<string, string> = {
   mute: `<svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3 3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4 9.91 6.09 12 8.18V4z"/></svg>`,
   low: `<svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M7 9v6h4l5 5V4l-5 5H7z"/></svg>`,
@@ -414,7 +405,6 @@ const GAIN_ICONS: Record<string, string> = {
   high: `<svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>`,
 };
 
-// ── Funciones de pintado ──────────────────────────────────────
 function repaintVol(): void {
   const slider = document.getElementById("vol-slider") as HTMLInputElement;
   document.getElementById("vol-label")!.textContent = gain.silenced ? "0" : String(gain.slider);
@@ -487,7 +477,6 @@ function repaintAll(): void {
   repaintVol();
 }
 
-// ── Pistas de demo ────────────────────────────────────────────
 const D1 = "/demo1.mp3";
 const D2 = "/demo2.mp3";
 const D3 = "/demo3.mp3";
