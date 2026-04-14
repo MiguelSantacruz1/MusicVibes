@@ -207,7 +207,7 @@ body.is-playing .logo-gem {
   border-radius: var(--r2);
   overflow: hidden;
   background: var(--bg);
-  height: 100px;
+  height: 800px;
   box-shadow: #030303;
   flex-shrink: 0;
   position: fixed;
