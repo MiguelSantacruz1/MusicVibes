@@ -67,14 +67,12 @@ export class SpectrumDisplay {
       let r: number, g: number, b: number;
 
       if (ratio < 0.5) {
-        // 🟠 → 🟢 (naranja → verde)
         const t = ratio * 2;
 
         r = Math.floor(255 * (1 - t));       // baja rojo
         g = Math.floor(140 + 100 * t);       // sube verde
         b = Math.floor(40 * (1 - t));        // poco azul
       } else {
-        // 🟢 → 🔵 (verde → azul)
         const t = (ratio - 0.5) * 2;
 
         r = Math.floor(80 * (1 - t));        // rojo casi desaparece
@@ -82,21 +80,18 @@ export class SpectrumDisplay {
         b = Math.floor(100 + 155 * t);       // azul sube
       }
 
-      // ✨ glow suave
       this.ctx.shadowBlur = 12;
       this.ctx.shadowColor = `rgba(${r}, ${g}, ${b}, 0.6)`;
 
       this.ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${0.4 + v * 0.6})`;
       this.ctx.fillRect(x + 1, y, bw - 2, bh);
 
-      // brillo arriba
       if (v > 0.55) {
         this.ctx.fillStyle = `rgba(255, 255, 255, ${v})`;
         this.ctx.fillRect(x + 1, y - 2, bw - 2, 2);
       }
     });
 
-    // línea base
     this.ctx.shadowBlur = 0;
     this.ctx.strokeStyle = "rgba(0,0,0,0.1)";
     this.ctx.beginPath();
