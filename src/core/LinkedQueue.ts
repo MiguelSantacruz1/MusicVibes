@@ -33,7 +33,6 @@ export class LinkedQueue {
     this._count++;
   }
 
-  /** Inserta al final */
   append(track: Track): void {
     const node = new QueueNode(track);
     if (!this.back) {
@@ -62,7 +61,6 @@ export class LinkedQueue {
     this._count++;
   }
 
-  /** Elimina nodo por uid */
   deleteByUid(uid: number): QueueNode | null {
     let cur = this.front;
     while (cur) {
@@ -90,7 +88,6 @@ export class LinkedQueue {
     return null;
   }
 
-  /** Convierte la lista a array */
   toList(): Track[] {
     const out: Track[] = [];
     let cur = this.front;
@@ -111,7 +108,6 @@ export class LinkedQueue {
     return out;
   }
 
-  /** Mezcla la lista (Fisher-Yates) */
   randomize(): void {
     if (this._count <= 1) return;
     const items = this.toList();
